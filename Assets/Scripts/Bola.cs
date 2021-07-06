@@ -15,10 +15,17 @@ public class Bola : MonoBehaviour
     public Text contadorIzquierda;
     public Text contadorDerecha;
     public Text FinJuego;
+    public Text Temporizador;
     AudioSource fuente;
 
     public AudioClip audioGol, audioRebote, audioRaqueta,audioVictoria;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        Temporizador.gameObject.SetActive(ModoJuego.modoJuego.tiempoFlag);
+    }
+
     void Start()
     {
         GetComponent<Rigidbody2D>().velocity = Vector2.right*velocidad;
@@ -26,6 +33,8 @@ public class Bola : MonoBehaviour
         contadorDerecha.text = golesDerecha.ToString();
         fuente = GetComponent<AudioSource>();
         tiempo = 0.0f;
+        
+        
     }
 
     
@@ -150,6 +159,8 @@ public class Bola : MonoBehaviour
         tiempo += Time.deltaTime;
         if (ModoJuego.modoJuego.tiempoFlag)
         {
+            
+            
             if (tiempo >= 180)
             {
                 if (golesIzquierda>golesDerecha)
@@ -182,6 +193,11 @@ public class Bola : MonoBehaviour
                 tiempo = 0.0f;
 
             }
+            else
+            {
+                DisplayTime(tiempo);
+            }
+            
         }
         
        
@@ -194,5 +210,11 @@ public class Bola : MonoBehaviour
     }
 
     public float velocidad = 30.0f;
+    void DisplayTime(float timeToDisplay)
+    {
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60); 
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+        Temporizador.text = string.Format("{0:00}:{1:00}",minutes,seconds);
+    }
     
 }
